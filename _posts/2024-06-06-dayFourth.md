@@ -1,3 +1,8 @@
+---
+layout: post
+title: 06-06-2024
+---
+
 #                                VIM EDITOR
 - Vim, short for Vi IMproved, is a highly configurable text editor built to enable efficient text editing. It’s an enhanced version of the Vi editor, which was developed back in the 1970s. Vim is widely used by programmers, system administrators, and anyone who spends a significant amount of time working in the terminal
 
