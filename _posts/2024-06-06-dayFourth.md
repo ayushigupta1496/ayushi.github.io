@@ -56,6 +56,41 @@ title: 06-06-2024
 
 
 ## Confriguring Vimrc
+- Vim is customized through a plain-text configuration file in ~/.vimrc.
+- Configuring your .vimrc file lets you use the full power of Vim. With a customized .vimrc file you can increase your Vim powers.
+- we can made the confriguration by creating .vimrc file in home directory
+
+-
+- Multiple windows
+- :sp / :vsp to split windows
+- Can have multiple views of the same buffer.
+
+# macros
+- The basic workflow of a Vim macro consists of recording your commands and keystrokes while doing the edits required to solve the problem on the first line, saving the command sequence to a register, and then replaying the macro to do the same on the remaining lines.
+- To record a macro and save it to a register, type the key q followed by a letter from a to z that represents the register to save the macro, followed by all commands you want to record, and then type the key q again to stop the recording.
+
+{% highlight ruby %}
+ To play execute below command −
+  @{macro-name}
+
+ #For instance to execute macro “a”, execute below command −
+  @a
+
+#To play same macro multiple times use numbers with it. For instance, to execute same macro 10 times execute following command −
+10@a
+{% endhighlight %}
+
+
+
+
+
+ 
+
+
+
+
+
+
 
 
 

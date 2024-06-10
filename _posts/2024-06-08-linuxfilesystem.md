@@ -59,6 +59,83 @@ Directorie	Description
     lsblk    //list block devices
     fdisk -l  <disk path> //to see the disk
     //here with the help we can create physical and extended partitions
-    **step-2**
-    Format with 
+    **step-2**-Format with the file system
+    mkfs.ext4 <disk path>
+    blkid <disk path>   //to see the uuid
+    **step-3**-Mount the part
+    mkdir <directory path>
+    mount <disk path> <mount path>  //but it is not permanent mounting
+    **To permanent mounting**
+    vim /etc/fstab
+    mounted partition[ space ] directory [ space ] file system type [ space ]  defaults  0   0 
+    mount -a //to mount partition permanently
+    unmount <disk path> <directory path>
+    df -h //to see the disk space
    {% endhighlight %}
+
+
+  **swap memory** - Swap space in Linux is used when the amount of physical memory (RAM) is full. If the system needs more memory resources and the RAM is full, inactive pages in memory are moved to the swap space. While swap space can help machines with a small amount of RAM
+     {% highlight ruby %}
+    **commands to create space memory**
+      lsblk  //to see the swap memory
+      mkswap  <disk path>
+      swapon  <disk path>
+      swapon -a   //to allocate all swap created
+     {% endhighlight %}
+
+
+# NFS(Network file system) 
+ - NFS allows a system to share directories and files with others over a network. By using NFS, users and     programs can access files on remote systems almost as if they were local files.
+ - NFS can be configured as a centralized storage solution.
+ - No need of running the same OS on both machines.
+ - Can be secured with Firewalls.
+ - The NFS share folder can be mounted as a local file system.
+
+-  NFS mount needed at least two machines. The machine hosting the shared folders is called as server and which connects is called as clients.
+
+**Configuring NFS Server**
+{% highlight ruby %}
+   suppose IP address Details of Server & Client
+   Server: 192.168.87.156
+    Client: 192.168.87.158
+     {% endhighlight %}
+****Configuring Server-side**
+      {% highlight ruby %}
+         #yum install nfs-utils nfs-utils-lib
+         # service rpcbind start
+         # service nfs start
+          {% endhighlight %}
+
+
+- We need to decide a directory which we want to share with the client. The directory should be added to /etc/exports      
+  {% highlight ruby %}
+       # vi /etc/exports
+      /share 192.168.87.158(rw,sync,no_root_squash)  //save the file
+       - /share – is the share folder which server wants to share
+       - 192.168.87.158 – is the IP address of the client to whom want to share
+       -  rw – This will all the clients to read and write the files to the share directory.
+       -  sync – which will confirm the shared directory once the changes are committed.
+       -  no_root_squash – This will all the root user to connect to the designated directory.
+        #exportfs -arv  //to notify Linux about the directories you are allowing to be remotely mounted using NFS.
+ {% endhighlight %}
+
+ **configuring client-side**
+
+{% highlight ruby %}
+ #yum install nfs-utils nfs-utils-lib 
+ #showmount -e 192.168.87.156
+ #mkdir -p /mnt/share  //create the directory to mount point the shared folder
+ #mount 192.168.87.156:/share /mnt/share/    //mounting the shared directory
+ #df -h
+ {% endhighlight %}
+
+ **Create a file and folders in the server share directory**
+
+- touch test1
+-  mkdir test
+   - // these files can also be seen on client side
+
+ 
+
+
+
