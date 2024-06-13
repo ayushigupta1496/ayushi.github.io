@@ -36,5 +36,26 @@ title: 10-06-2024
    a-all
    -rwxrwxrwx   normal file
    drwxrx---   directory 
-   lrwxrw---  linl file
+   lrwxrw---  link file
   {% endhighlight %}
+
+  **Tochange file permissions in linux**
+  - chmod u+r <filename>
+  - chmod u-r <filename>
+  - chmod ugo+r <filename>
+  - chmod a+w <filename>
+
+  **chmod in numeric mode**
+  -  for example - chmod 756 <filename>
+  - 0-no permission
+  - 1- x(execute)
+  - 2 -w(write)
+  - 4-r(read)
+  - 3- x+w
+  - 5 -r+x
+  - 6 -r+w
+  - 7-r+w+x
+
+  - the default permission for directory-755
+  - the default permission for file - 644
+   
