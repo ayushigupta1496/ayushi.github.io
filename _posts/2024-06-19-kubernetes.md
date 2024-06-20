@@ -116,16 +116,16 @@ title: 19-06-2024
 
  - yaml file to launch pod
     {% highlight ruby %}
-         apiVersion: v1
+      apiVersion: v1
       kind: Pod
-      metadata:
-      name: nginx
+        metadata:
+           name: webapp
       spec:
-      containers:
-      - name: nginx
-         image: nginx:latest
-         ports:
-         - containerPort: 80
+        containers:
+          - name: nginx
+            image: nginx:latest
+            ports:
+              - containerPort: 80
     {% endhighlight %}
 
 
