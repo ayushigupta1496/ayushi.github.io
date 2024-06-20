@@ -108,5 +108,29 @@ title: 19-06-2024
    3. Kube-proxy - The kube-proxy is the network proxythat runs on each worker node,it is responsible for routing traffic to the correct pods and it also provide load-balancing for the pods and ensures traffic is distributed evenly across the pods.
 
 
+ **Pods**
+ - pods-Pods are the smallest deployable units of computing that you can create and manage in Kubernetes.
+ - A Pod is a group of one or more containers, with shared storage and network resources, and a specification for how to run the containers.
+ - A Pod's contents are always co-located and co-scheduled, and run in a shared context.
+
+
+ - yaml file to launch pod
+    {% highlight ruby %}
+         apiVersion: v1
+      kind: Pod
+      metadata:
+      name: nginx
+      spec:
+      containers:
+      - name: nginx
+         image: nginx:latest
+         ports:
+         - containerPort: 80
+    {% endhighlight %}
+
+
+
+
+
 
  
