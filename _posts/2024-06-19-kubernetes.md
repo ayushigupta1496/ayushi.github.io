@@ -10,7 +10,7 @@ title: 19-06-2024
 - Kubernetes helps in scaling applications,load-balancing, self-healing, and rolling updates, making it well-suited for running containers.
 
 **Kubernetes Installation script**
- {% highlight ruby %}
+   {% highlight ruby %}
     sudo apt-get update -y
     sudo apt-get install -y apt-transport-https ca-certificates curl
 
@@ -77,7 +77,7 @@ title: 19-06-2024
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
     kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
- {% endhighlight %}
+    {% endhighlight %}
 
 
  **Kubernetes Architecture**
@@ -101,11 +101,11 @@ title: 19-06-2024
 
    **The core components of kubernetes that run on the worker node are**
 
-      1. Kubelet - the kubelet is a daemon that run on each worker node,it is responsible for communicating with control plane.It receieve information from control plane for which pod to run on the node and ensures that the desired state of the pod is maintained.
+   1. Kubelet - the kubelet is a daemon that run on each worker node,it is responsible for communicating with control plane.It receieve information from control plane for which pod to run on the node and ensures that the desired state of the pod is maintained.
 
-      2. Container-Runtime - The container runtime runs the container on worker nodes,it is responsible for pulling the container image from the registry,starting and stopping the containers and managing the container's resources.
+   2. Container-Runtime - The container runtime runs the container on worker nodes,it is responsible for pulling the container image from the registry,starting and stopping the containers and managing the container's resources.
 
-      3. Kube-proxy - The kube-proxy is the network proxythat runs on each worker node,it is responsible for routing traffic to the correct pods and it also provide load-balancing for the pods and ensures traffic is distributed evenly across the pods.
+   3. Kube-proxy - The kube-proxy is the network proxythat runs on each worker node,it is responsible for routing traffic to the correct pods and it also provide load-balancing for the pods and ensures traffic is distributed evenly across the pods.
 
 
 
