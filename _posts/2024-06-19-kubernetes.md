@@ -117,7 +117,7 @@ title: 19-06-2024
     -  kind - What kind of object you want to create
     -  metadata - Data that helps uniquely identify the object
     -  spec - What state you desire for the object
-  **Commands to launch pod through ad-hoc commands**
+**Commands to launch pod through ad-hoc commands**
     {% highlight ruby %}
     #command to create new pod
     kubectl run <podname> --image=image name
@@ -194,9 +194,10 @@ spec:
 {% endhighlight %}
 
 **commands to create deployment through yaml file**
-- kubectl create -f <filename>
+ kubectl create -f <filename>
+
 **command to create & run the deployment**
-- kubectl apply -f <filename> 
+ kubectl apply -f <filename> 
 
 
 
