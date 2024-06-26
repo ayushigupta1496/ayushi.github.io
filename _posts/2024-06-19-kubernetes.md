@@ -107,14 +107,28 @@ title: 19-06-2024
 
    3. Kube-proxy - The kube-proxy is the network proxythat runs on each worker node,it is responsible for routing traffic to the correct pods and it also provide load-balancing for the pods and ensures traffic is distributed evenly across the pods.
 
-
- **Pods**
+ **1. KIND - pod** 
  - pods-Pods are the smallest deployable units of computing that you can create and manage in Kubernetes.
  - A Pod is a group of one or more containers, with shared storage and network resources, and a specification for how to run the containers.
  - A Pod's contents are always co-located and co-scheduled, and run in a shared context.
 
+   - Field of the yaml file
+    -  apiVersion - Which version of the Kubernetes API we are using to create this object
+    -  kind - What kind of object you want to create
+    -  metadata - Data that helps uniquely identify the object
+    -  spec - What state you desire for the object
+  **Commands to launch pod through ad-hoc commands**
+    {% highlight ruby %}
+    #command to create new pod
+    kubectl run <podname> --image=image name
+    kubectl get pods
+    kubectl describe pod <podname>
+    kubectl exec -it <container name/id> bash
+    {% endhighlight %}
 
- - yaml file to launch pod
+
+
+    **yaml file to launch pod**
     {% highlight ruby %}
       apiVersion: v1
       kind: Pod
@@ -127,7 +141,70 @@ title: 19-06-2024
             ports:
               - containerPort: 80
     {% endhighlight %}
+    - kubectl create -f <filename>
 
+    
+**2. KIND - DEPLOYMENT**
+ - Deployment - A Kubernetes Deployment tells Kubernetes how to create or modify instances of the pods that hold a containerized application.
+ - Deployments can help to efficiently scale up and scale down the number of replica pods.
+ - We can describe a desired state in a Deployment,and the deployment controller changes the actual state to the desired state.
+ - We can define Deployments to create new ReplicaSets, or to remove existing Deployments and adopt all their resources with new Deployments.
+  
+ **Ad-hoc commands for deployment**
+    {% highlight ruby%}
+    # to create new deployment
+      kubectl create deployment <deploymentname> --image=image name
+    # to check status of deployment
+      kubectl get deployment
+    # to check all the info of deployment
+      kubectl describe deployment <deployment name>
+    # to delete deployment
+      kubectl delete deployment <deployment name>  
+    # to scale up and down the replicas
+      kubectl scale deployment <deployment name> --replicas=no
+    # to check status of replicaset 
+      kubectl get replicaset
+    # to check info of replicaset 
+      kubectl describe replicaset <name>            
+    {% endhighlight %}
+
+**yaml file for deployment**
+{% highlight ruby%}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-app
+  labels:
+    app: nginx
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+{% endhighlight %}
+
+**commands to create deployment through yaml file**
+- kubectl create -f <filename>
+**command to create & run the deployment**
+- kubectl apply -f <filename> 
+
+
+
+
+
+
+
+ 
 
 
 
