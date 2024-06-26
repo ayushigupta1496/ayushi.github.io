@@ -197,11 +197,11 @@ spec:
 
 **commands to create deployment through yaml file**
 
- kubectl create -f <filename>
+ kubectl create -f filename
 
 **command to create & run the deployment**
 
- kubectl apply -f <filename> 
+ kubectl apply -f filename
 
 
 
