@@ -144,7 +144,8 @@ title: 19-06-2024
             ports:
               - containerPort: 80
     {% endhighlight %}
-    - kubectl create -f <filename>
+    
+ - kubectl create -f <filename>
 
     
 **2. KIND - DEPLOYMENT**
