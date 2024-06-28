@@ -130,7 +130,8 @@ title: 19-06-2024
 
 
 
-    **yaml file to launch pod**
+**yaml file to launch pod**
+
     {% highlight ruby %}
       apiVersion: v1
       kind: Pod
