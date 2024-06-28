@@ -204,6 +204,68 @@ spec:
  kubectl apply -f filename
 
 
+**Kubernetes Replication-Controller & Kubernetes-Replica-set**
+
+1. Replication controller - A ReplicationController ensures that a specified number of pod replicas are running at any one time or it ensures that a pod or a homogeneous set of pods is always up and available.
+- The pods maintained by a ReplicationController are automatically replaced if they fail, are deleted, or are terminated. For example, your pods are re-created on a node after disruptive maintenance such as a kernel upgrade. 
+- Replication-controller support rolling update,it means it allows a  update to take place with zero downtime. It does this by incrementally replacing the current Pods with new ones. The new Pods are scheduled on Nodes with available resources, and Kubernetes waits for those new Pods to start before removing the old Pods.
+
+**Manifest file for kind replication controller**
+
+  {% highlight ruby%}
+    apiVersion: v1
+    kind: ReplicationController
+    metadata:
+      name: nginx
+    spec:
+      replicas: 5
+      selector:
+        app: nginx
+      template:
+        metadata:
+          name: nginx
+          labels:
+            app: nginx
+        spec:
+          containers:
+          - name: nginx
+            image: nginx
+            ports:
+            - containerPort: 80
+  {% endhighlight %}
+
+
+2. Replica-set - A ReplicaSet's purpose is to maintain a stable set of replica Pods running at any given time. As such, it is often used to guarantee the availability of a specified number of identical Pods, it does not support rolling update feature It is responsible for monitoring the health of the modules it manages and ensuring that the required number of replicas are always running, thus providing self-healing capabilities. ReplicaSet automatically detect and recover from module failures by creating new replicas to replace the failed ones, ensuring that the desired state of the application is maintained. With their self-healing feature, ReplicaSet contribute to the overall resilience and high availability of applications in Kubernetes clusters.
+
+**Manifest file for Replica-set**
+
+{% highlight ruby%}
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend
+  labels:
+    app: web-app
+    tier: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: web
+        image: nginx
+        ports:
+        - containerPort: 80
+  {% endhighlight %}
+
+
+
 
 
 
