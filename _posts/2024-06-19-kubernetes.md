@@ -145,8 +145,8 @@ title: 19-06-2024
               - containerPort: 80
     {% endhighlight %}
 
-- command to run manifest file for pod
-   kubectl create -f  <filename>
+- command to run manifest file for pod.
+    kubectl create -f  <filename>
 
     
 **2. KIND - DEPLOYMENT**
@@ -266,6 +266,11 @@ spec:
         ports:
         - containerPort: 80
   {% endhighlight %}
+     
+
+
+## kubernetes network
+
 
 
 
