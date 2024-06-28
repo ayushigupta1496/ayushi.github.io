@@ -146,7 +146,8 @@ title: 19-06-2024
     {% endhighlight %}
 
 **command to run manifest file for pod**
- kubectl create -f  <filename>
+
+ kubectl create -f filename
 
     
 **2. KIND - DEPLOYMENT**
