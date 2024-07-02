@@ -271,6 +271,11 @@ spec:
 
 
 ## kubernetes network
+  
+
+
+
+
 
 1. Kind- Service
 
@@ -358,8 +363,10 @@ service to outside world
       type: LoadBalancer
    {% endhighlight %}
 
-- Ad-hoc command to expose load balancer service.
- **kubectl expose deployment example --port=8765 --target-port=9376 --name=example-service --type=LoadBalancer**
+**Ad-hoc command to expose load balancer service**
+- kubectl expose deployment example --port=8765 --target-port=9376 --name=example-service --type=LoadBalancer**
+
+
 
 
 
