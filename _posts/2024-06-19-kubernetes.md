@@ -272,6 +272,97 @@ spec:
 
 ## kubernetes network
 
+1. Kind- Service
+
+- Service - In Kubernetes, a Service is a method for exposing a network application that is running as one or more Pods in our cluster.
+- We use a Service to make that set of Pods available on the network so that clients can interact with it.
+
+- Kubernetes Service types allow us to specify what kind of Service we want.The available type values and their behaviors are:-
+1. Cluster-IP - Exposes the Service on a cluster-internal IP. Choosing this value makes the Service only reachable from within the cluster. This is the default type that is used if we don't explicitly specify a type for a Service. This service type is used when we don't want to the
+service to outside world
+
+   {% highlight ruby %}
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: Backend
+    spec:
+      type: ClusterIP
+      ports:
+        - targetPort: 80
+          port: 80
+      selector:
+        name: my-demo-pod 
+   {% endhighlight %}
+
+2. NodePort - NodePort service in Kubernetes is a service that is used to expose the application to the internet from where the end-users can access it.It will also expose the applications which are running in the node it also allows the traffic from the outside to reach the application with the help of NodePort.
+
+- The NodePort port must be in the range between 30000 to 32767 and if we don’t specify the NodePort value Kubernetes will assign it randomly.
+  
+
+   {% highlight ruby %}
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: web-app
+      spec:
+        replicas: 3
+        selector:
+          matchLabels:
+            app: web-containers
+        template:
+          metadata:
+            labels:
+              app: web-containers
+          spec:
+            containers:
+            - image: nginx:latest
+              name: web
+              ports:
+              - containerPort: 80
+        ---
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: nginx-service
+      spec:
+        selector:
+          app: web-containers
+        ports:
+        - port: 80
+          protocol: TCP
+          targetPort: 80
+        type: NodePort
+ 
+     {% endhighlight %}
+
+
+ 3. Load balancer -  A Kubernetes load balancer is a component that distributes network traffic across multiple instances of an application running in a K8S cluster. It acts as a traffic manager, ensuring that incoming requests are evenly distributed among the available instances to optimize performance and prevent overload on any single node, providing high availability and scalability.
+ 
+-  The LoadBalancer service type is built on top of NodePort service types by provisioning and configuring external load balancers from cloud providers.
+-   Load balancers in K8S can be implemented by using a cloud provider-specific load balancer such as Azure Load Balancer, AWS Network Load Balancer (NLB), or Elastic Load Balancer (ELB).
+
+- Manifest file for service type - LoadBalancer
+  
+  {% highlight ruby %}
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: example-service
+    spec:
+      selector:
+        app: example
+      ports:
+        - port: 8765
+          targetPort: 9376
+      type: LoadBalancer
+   {% endhighlight %}
+
+- Ad-hoc command to expose load balancer service
+  **kubectl expose deployment example --port=8765 --target-port=9376 --name=example-service --type=LoadBalancer**
+
+
+
 
 
 
