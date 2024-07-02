@@ -281,7 +281,7 @@ spec:
 
 - Once you’ve specified the type of network configuration type, the container runtime defines the network that containers join. The runtime adds the interface to the container namespace via a call to the CNI plugin and allocates the connected subnetwork routes via calls to the IP Address Management (IPAM) plugin.
 
-![](/ayushi.github.io/images/network.webp)
+    ![](../images/network.webp)
 
 
 
