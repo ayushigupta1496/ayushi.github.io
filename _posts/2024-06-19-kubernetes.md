@@ -277,9 +277,12 @@ spec:
 
 - The network model is implemented by the container runtime on each node. The container runtimes use Container Network Interface (CNI) plugins to manage their network and security capabilities and many different CNI plugins exist from many different vendors for example Flannel,  Calico , Weave and many more.
 
+- Once you’ve specified the type of network configuration type, the container runtime defines the network that containers join. The runtime adds the interface to the container namespace via a call to the CNI plugin and allocates the connected subnetwork routes via calls to the IP Address Management (IPAM) plugin.
+- 
+
 - CNI can integrate smoothly with the kubelet to enable the use of an overlay or underlay network to automatically configure the network between pods. Overlay networks encapsulate network traffic using a virtual interface such as Virtual Extensible LAN (VXLAN). Underlay networks work at the physical level and comprise switches and routers.
 
-- Once you’ve specified the type of network configuration type, the container runtime defines the network that containers join. The runtime adds the interface to the container namespace via a call to the CNI plugin and allocates the connected subnetwork routes via calls to the IP Address Management (IPAM) plugin.
+
 
     ![](../images/network.webp)
 
