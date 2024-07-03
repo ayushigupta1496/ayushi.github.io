@@ -577,6 +577,185 @@ service to outside world
                   ClaimName: "demo-pv"    
       {% endhighlight %}
 
+# Storage class
+
+- Storage class - A Kubernetes StorageClass is a Kubernetes storage mechanism that lets us dynamically provision persistent volumes (PV) in a Kubernetes cluster. 
+
+- Every StorageClass has the following fields:
+
+  1. Provisioner—this is the plugin used to provision the storage volume
+
+  2. Parameters—indicate properties of the underlying storage system
+
+  3. reclaimPolicy—indicates under what conditions the storage is released by a pod and can be reclaimed for use by other pods
+
+  4. Volume Binding Mode - The volumeBindingMode field of the StorageClass determines how pods bind to a storage volume.There are two modes one is Immediate and other is WaitForFirstConsumer.
+
+    - Immediate - Immediate indicates that dynamic provisioning and binding occur immediately upon the creation of a PersistentVolumeClaim.
+
+    - WaitForFirstConsumer - This mode delays the binding and provisioning of the PersistentVolume until the creation of a pod using a matching PersistentVolumeClaim.
+
+**Manifest file for storage class**  
+    {% highlight ruby %}
+      apiVersion: v1
+      kind: StorageClass
+      metadata:
+        name: ebs-sc
+      provisioner: ebs.csi.aws.com
+      volumeBindingMode: WaitForFirstConsumer
+      reclaimPolicy: Retain
+      parameters:
+        fstype: xfs
+        type: io1
+        iopsPerGB: "50"
+        encrypted: "true"
+      allowedTopologies:
+      - matchLabelExpressions:
+        - key: topology.ebs.csi.aws.com/zone
+          values:
+          - us-east-2c
+          
+   {% endhighlight %}
+
+**Manifest file for PVC**
+
+  {% highlight ruby %}
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: demo-pvc
+    spec:
+      accessModes:
+        - ReadWriteMany
+      storageClassName: ebs-sc  
+      resources:
+        requests:
+          storage: 1Gi
+  {% endhighlight %}
+
+
+
+# Affinity and anti-affinity
+ - There are two types of affinity
+ 1. **Node affinity** - Node affinity is conceptually similar to nodeSelector, allowing you to constrain which nodes your Pod can be scheduled on based on node labels. There are two types of node affinity:
+
+    - requiredDuringSchedulingIgnoredDuringExecution - The scheduler can't schedule the Pod unless the rule is met.This is the "hard" affinity matcher that requires the Node meet the constraints we define.
+
+    - preferredDuringSchedulingIgnoredDuringExecution -The scheduler tries to find a node that meets the rule. If a matching node is not available, the scheduler still schedules the Pod.This is the "soft" matcher to express a preference that's ignored when it can't be fulfilled.
+
+- command to apply label on node
+  - kubectl label nodes node-names label-key=label-value
+
+- we can use four operators while defining affinity these are In, NotIn, Exists, DoesNotExist:-
+
+  1. In- In is used when we have to launch the pod in the node which has matching key and value.
+  2. NotIn - NotIn is used when we don't have to launch the pod in the nod which has matching key and value.
+  3. Exists - Exists is used when we have to launch the pod in the node which has only matching key.
+  4. DoesNotExist - DoesNotExists is used when we don't have to launch the pod in the node which has matching key.
+  
+**Manifest file for node-affinity**
+  {% highlight ruby %}
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: with-node-affinity
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - antarctica-east1
+                - antarctica-west1
+                preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 1
+                  preference:
+                    matchExpressions:
+                    - key: label-key
+                      operator: In
+                      values:
+                      - label-value
+            containers:
+            - name: with-node-affinity
+              image: nginx
+  {% endhighlight %}
+
+
+
+2. **Inter-Pod affinity and pod anti-affinity** - Pod affinity/anti-affinity allows a pod to specify an affinity (or anti-affinity) towards a group of pods it can be placed with. 
+  
+
+  - There are two types of Pod affinity and anti-affinity as follows:
+    1. requiredDuringSchedulingIgnoredDuringExecution
+    2. preferredDuringSchedulingIgnoredDuringExecution
+
+
+
+
+**Manifest file for Inter-Pod affinity and pod anti-affinity**
+
+    {% highlight ruby %}
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        name: with-pod-affinity
+      spec:
+        affinity:
+          podAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: security
+                  operator: In
+                  values:
+                  - app
+              topologyKey: topology.kubernetes.io/zone
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: security
+                    operator: In
+                    values:
+                    - store
+                topologyKey: topology.kubernetes.io/zone
+        containers:
+        - name: with-pod-affinity
+          image: nginx
+    {% endhighlight %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
