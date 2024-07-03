@@ -484,7 +484,7 @@ service to outside world
   1. Static - With static provisioning, the PV is created in advance by the cluster administrator, the developer creates the PVC and the Pod, and the Pod uses the storage provided by the PV through the PVC.
 
   2. Dynamic - For dynamic provisioning, when none of the static PVs created by the administrator can match the user’s PVC, the cluster will try to automatically provision a storage volume for the PVC, which is based on StorageClass. In the dynamic provisioning direction, the PVC needs to request a storage class, but this storage class must be pre-created and configured by the administrator. The cluster administrator needs to enable the access controller for DefaultStorageClass in the API Server. 
-
+  
 - Binding - The user creates a PVC (or has previously created one for dynamic provisioning), specifying the requested storage size and access mode. The master has a control loop to monitor new PVCs, find matching PVs (if any), and bind the PVC and PV together.The access modes in PV and PVC are:-
  1. ReadOnlyMany(ROX) - allows being mounted by multiple nodes in read-only mode.
  2. ReadWriteOnce(RWO) -  allows being mounted by a single node in read-write mode.
