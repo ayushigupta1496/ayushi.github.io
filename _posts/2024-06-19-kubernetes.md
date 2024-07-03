@@ -384,6 +384,220 @@ service to outside world
 - kubectl expose deployment example --port=8765 --target-port=9376 --name=example-service --type=LoadBalancer**
 
 
+# Kubernetes Volume
+- Kubernetes supports various volumes, allowing each pod to use several volume types simultaneously. Ephemeral volumes are bound to the pod's lifetime, while persistent volumes can persist beyond the pod's lifetime. It means Kubernetes destroys ephemeral volumes once their pod no longer exists while keeping the data of persistent volumes.
+
+- A volume is a directory, possibly with some data in it, which is accessible to the containers in a pod. 
+
+- **Kubernetes supports several types of volumes.**
+1. awsElasticBlockStore
+2. azureDisk
+3. OpenStack Cinder
+4. configMap
+5. emptyDir
+6. hostPath
+
+
+- **emptyDir** - For a Pod that defines an emptyDir volume, the volume is created when the Pod is assigned to a node.All containers in the Pod can read and write the same files in the emptyDir volume, though that volume can be mounted at the same or different paths in each container. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted permanently.
+
+   {% highlight ruby %}
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: test-pd
+    spec:
+      containers:
+      - image: nginx:latest
+        name: test-container
+        volumeMounts:
+        - mountPath: /data
+          name: volume1
+      volumes:
+      - name:volume1
+        emptyDir:
+          sizeLimit: 500Mi
+   {% endhighlight %}
+
+
+- **hostPath** - A hostPath volume mounts a file or directory from the host node's filesystem into your Pod.   
+
+    {% highlight ruby %}
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: web-app
+      spec:
+        replicas: 3
+        selector:
+          matchLabels:
+            app: web-containers
+        template:
+          metadata:
+            labels:
+              app: web-containers
+          spec:
+            containers:
+            - image: nginx:latest
+              name: web
+              ports:
+              - containerPort: 80
+              volumeMount:
+                - mountPath: /data/new
+                  name: vol1
+            volumes:
+              - name: vol1
+                hostPath:
+                  path: /data     
+      {% endhighlight %}
+
+
+# Persistent Volumes
+
+**Why we need Persistent Volume**
+
+- In Kubernetes, volumes are essentially temporary directories that can be mounted by containers within a pod. However, once a pod terminates, the data stored within the volumes is lost. On the contrary, Persistent Volumes provide a means to decouple storage from pods, enabling data persistence even when pods come and go.When it comes to Kubernetes volumes, they are tightly coupled with the lifecycle of a pod. This means that when a pod is terminated or rescheduled, the data stored within its volumes is lost. This limitation can be problematic for applications that require data persistence, such as databases or file storage systems.
+
+- Moreover, Persistent Volumes in Kubernetes offer support for various storage technologies, including local storage, network-attached storage (NAS), and cloud storage platforms. This flexibility ensures that developers can meet their specific storage requirements without being bound to a single solution.
+
+**Persistent Volume** - PV is the way to define the storage data, PV is a resource object in a Kubernetes cluster; creating a PV is equivalent to creating a storage resource object.To use this resource, it must be requested through persistent volume claims (PVC).
+
+**Persistent Volume Claim(PVC)** - A PVC volume is a request for storage, which is used to mount a PV into a Pod.
+
+**Types of Persistent Volumes**
+
+- PersistentVolume types are implemented as plugins. Kubernetes currently supports the following plugins:
+
+ 1.  csi - Container Storage Interface (CSI)
+ 2.  fc - Fibre Channel (FC) storage
+ 3. hostPath - HostPath volume (for single node testing only; WILL NOT WORK in a multi-node cluster; consider using local volume instead)
+ 4. iscsi - iSCSI (SCSI over IP) storage
+ 5. local - local storage devices mounted on nodes.
+ 6. nfs - Network File System (NFS) storage
+
+ - Note - for using type of volume like awsElasticBlockStore, azureDisk, cinder etc we have to install corresponding CSI(Container storage interface) drivers.
+
+**Lifecycle & Features of PV and PVC**
+
+- In a Kubernetes cluster, a PV exists as a storage resource in the cluster. PVCs are requests for those resources and also act as claim      checks to the resource. The interaction between PVs and PVCs follows this lifecycle:-
+
+- Provisioning - the creation of the PV, either directly (static) or dynamically using StorageClass.
+ 1. Static - With static provisioning, the PV is created in advance by the cluster administrator, the developer creates the PVC and the Pod, and the Pod uses the storage provided by the PV through the PVC.
+
+ 2. Dynamic - For dynamic provisioning, when none of the static PVs created by the administrator can match the user’s PVC, the cluster will try to automatically provision a storage volume for the PVC, which is based on StorageClass. In the dynamic provisioning direction, the PVC needs to request a storage class, but this storage class must be pre-created and configured by the administrator. The cluster administrator needs to enable the access controller for DefaultStorageClass in the API Server. 
+
+- Binding - The user creates a PVC (or has previously created one for dynamic provisioning), specifying the requested storage size and access mode. The master has a control loop to monitor new PVCs, find matching PVs (if any), and bind the PVC and PV together.The access modes in PV and PVC are:-
+ 1. ReadOnlyMany(ROX) - allows being mounted by multiple nodes in read-only mode.
+ 2. ReadWriteOnce(RWO) -  allows being mounted by a single node in read-write mode.
+ 3. ReadWriteMany(RWX) -  allows multiple nodes to be mounted in read-write mode.
+ 4. ReadWriteMany- the volume can be mounted as read-write by many nodes.
+ 5. ReadWriteOncePod- the volume can be mounted as read-write by a single Pod
+
+- Using - Pods use the volume through the PVC and the Kubernetes cluster looks up the bound PV by the PVC and mounts it to the Pod. 
+
+- Reclaiming-Policies - the PV is reclaimed, either by keeping it for the next use or by deleting it directly from the cloud storage.These Reclaim-Policies are-
+
+  1. Retain - meaning the PV, until deleted, is kept alive.
+  2. Recycle - meaning the data can be restored later after getting scrubbed.
+  3. Delete - associated storage assets (such as AWS EBS, GCE PD, Azure Disk, and OpenStack Cinder volumes) are deleted.
+
+- Class -  A PV can specify a StorageClass to dynamically bind the PV and PVC, where the specific StorageClass is specified via the storageClassName property. If no PV is specified with this property, it can only bind to a PVC that does not require a specific class.
+
+- Capacity - Generally, a PV will specify storage capacity. This is set by using the capacity property of the PV.
+
+
+**manifest file for Persistent volume**
+
+   {% highlight ruby %}
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: demo-pv
+    spec:
+      accessModes:
+        - ReadWriteMany
+      capacity:
+        storage: 5Gi
+      local:
+        path: /tmp/demo-pv
+  {% endhighlight %}
+
+**Commands to run the file and check status**
+
+  - kubectl apply -f filename.yaml
+  - kubectl get pv
+
+
+- Next, create a PVC for your volume.
+
+**manifest file for Persistent volume claim**
+
+  {% highlight ruby %}
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: demo-pvc
+    spec:
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 1Gi
+      volumeName: demo-pv
+  {% endhighlight %}
+
+
+- Now we can attach this pvc to any manifest file
+
+  {% highlight ruby %}
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: web-app
+      spec:
+        replicas: 3
+        selector:
+          matchLabels:
+            app: web-containers
+        template:
+          metadata:
+            labels:
+              app: web-containers
+          spec:
+            containers:
+            - image: nginx:latest
+              name: web
+              ports:
+              - containerPort: 80
+              volumeMount:
+                - mountPath: /data/new
+                  name: vol1
+            volumes:
+              - name: vol1
+                PersistentVolumeClaim:
+                  ClaimName: "demo-pv"    
+      {% endhighlight %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
 
 
 
