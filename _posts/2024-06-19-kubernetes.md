@@ -484,7 +484,7 @@ service to outside world
   1. Static - With static provisioning, the PV is created in advance by the cluster administrator, the developer creates the PVC and the Pod, and the Pod uses the storage provided by the PV through the PVC.
 
   2. Dynamic - For dynamic provisioning, when none of the static PVs created by the administrator can match the user’s PVC, the cluster will try to automatically provision a storage volume for the PVC, which is based on StorageClass. In the dynamic provisioning direction, the PVC needs to request a storage class, but this storage class must be pre-created and configured by the administrator. The cluster administrator needs to enable the access controller for DefaultStorageClass in the API Server. 
-  
+
 - Binding - The user creates a PVC (or has previously created one for dynamic provisioning), specifying the requested storage size and access mode. The master has a control loop to monitor new PVCs, find matching PVs (if any), and bind the PVC and PV together.The access modes in PV and PVC are:-
  1. ReadOnlyMany(ROX) - allows being mounted by multiple nodes in read-only mode.
  2. ReadWriteOnce(RWO) -  allows being mounted by a single node in read-write mode.
@@ -728,6 +728,80 @@ service to outside world
         - name: with-pod-affinity
           image: nginx
     {% endhighlight %}
+
+
+# Kind: Secret
+
+- Secret - A Secret is an object that contains a small amount of sensitive data such as a password, a token, or a key. 
+
+**Commands to create and check status of secret**
+
+- kubectl get secret
+- kubectl create secret secretName generic --from-file = filename
+- kubectl describe secret secretName
+- kubectl edit secret secretName
+- kubectl get secret -o json
+- kubectl delete secret secretName
+
+- #If we have to give secret text directly
+- kubectl create secret secretName generic --from-literal=USERNAME=admin --from-literal=PASSWORD=redhat
+
+
+**Types of secret**
+
+ 1. Opaque - To take value from encoded format & then encrypt it ,basically used for generic key-value pair format.
+ 2. Kubernetes.io/tls - Used for tls certificates including the certificate and private key
+ 3. Kubernetes.io/Docker configjson - used for storing docker registry authentication in a base64 encoded json format.
+ 4. bootstrap.kubernetes.io/tokens - used for bootstrap tokens.
+
+
+#Scenario when we keep secret file on host and use it on container
+
+   {% highlight ruby %}
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: mypod
+      labels:
+        app: new 
+    spec:
+      containers:
+        - name: mycontainer
+          image: mysql:latest
+          volumeMount: 
+            - name: mysecrets
+              mountPath: "/mysecrets"
+      volumes:
+        - name: mysecrets
+          secret:
+            secretName: volumesecret
+
+    ---
+    apiVersion: v1
+    kind: secret
+    metadata:
+      name: volumesecret
+      label:
+        app: new
+    data:
+      USERNAME: username
+      PASSWORD: password
+    type: opaque                       
+  {% endhighlight %}
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
 
 
 
