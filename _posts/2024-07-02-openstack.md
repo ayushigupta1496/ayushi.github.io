@@ -147,7 +147,6 @@ title: 02-07-2024
 
 
 **Commands to launch a VM in openstack**
-
 1. Commands for project:-
 
 - openstack project list
