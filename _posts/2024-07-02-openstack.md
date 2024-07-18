@@ -146,6 +146,72 @@ title: 02-07-2024
 
 
 
+**Commands to launch a VM in openstack**
+
+1. Commands for project:-
+
+- openstack project list
+- openstack project create projectname
+
+2. commands for user creation:-
+
+- openstack user create –domain default –password password username
+- openstack domain list
+- openstack user list
+
+3. commands to define roles:-
+
+- openstack role list
+- openstack role add –project projectname –user username role
+
+4. commands to create image:-
+
+- cd devstack/
+- source openrc
+- openstack image list
+- wget https://releases.ubuntu.com/jammy/ubuntu-22.04.4-live-server-amd64.iso
+- openstack image list
+- openstack image create “ubuntu” --disk-format iso –container-format aki --public –-file /opt/stack/devstack/ubuntu-22.04.4-live-server-amd64.iso
+  
+
+5. Commands to list and create flavour:-
+
+- openstack flavor list
+- openstack flavor create --ram 512 --disk 1 --vcpus 1 m1.tiny
+
+6. commands to create volume:-
+
+- openstack volume list
+- openstack volume create --size 1 MyFirstVolume
+
+7. commands to create network.
+
+- openstack network create NETWORK_NAME
+- openstack subnet create --subnet-range SUBNET --network NETWORK SUBNET_NAME
+- openstack subnet create --subnet-range 10.0.0.0/29 --network net1 subnet1
+- openstack security group list
+- openstack security group rule list
+- openstack security group create –-project projectname sgname
+- openstack security group rule create –-proto tcp –-dst-port 22 sgname
+
+
+8. commands to create and list keypair.
+
+- openstack keypair list
+- openstack keypair create test > test.pem
+
+9. commands to create and list server.
+
+- openstack server list
+- openstack server create –-image cirros-0.6.2-x86_64-disk –-flavor ds4G –-security-group sg1 –-key-name test –-availability-zone nova –-   --network net1 servername
+- openstack server resume NAME
+- openstack server stop NAME
+
+
+
+
+
+
 
 
 
