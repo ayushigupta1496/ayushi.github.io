@@ -13,6 +13,24 @@ title: 02-07-2024
 - All services have atleast one API process,which listens for api requests and preprocesses them and passes them to the other part of the services.
 
 
+**Openstack Installation by Devstack**
+{% highlight ruby %}
+ 1. sudo useradd -s /bin/bash -d /opt/stack -m stack
+ 2. sudo chmod +x /opt/stack
+ 3. echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
+ 4. sudo -u stack -i
+ 5. git clone https://opendev.org/openstack/devstack
+ 6. cd devstack
+ 7. //Create a local.conf file with four passwords preset at the root of the devstack git repo.
+    [[local|localrc]]
+      ADMIN_PASSWORD=secret
+      DATABASE_PASSWORD=$ADMIN_PASSWORD
+      RABBIT_PASSWORD=$ADMIN_PASSWORD
+      SERVICE_PASSWORD=$ADMIN_PASSWORD
+ 8. ./stack.sh   
+
+{% endhighlight %}
+
 **The architecture of OpenStack is modular, consisting of several core components that work together to provide cloud services.**
 
 1.  Compute (Nova):
@@ -110,6 +128,26 @@ title: 02-07-2024
 - Publishers - Publishers in Ceilometer allow integration with external monitoring tools.
 
 - Database - Stores configuration data and state information.
+
+9. Database Service (Trove)
+- Provides database as a service (DBaaS) functionality for managing relational database services.
+
+10.  Messaging Service (Zaqar)
+- Zaqar enables communication between distributed components in OpenStack and external applications.
+
+11. Shared File System Service (Manila)
+-  Manila manages shared file systems that can be mounted concurrently by multiple compute instances.
+
+12. Bare Metal Provisioning (Ironic)
+- Ironic manages physical machines by leveraging existing OpenStack services like Nova for scheduling and orchestration.
+
+13. Container Orchestration (Magnum)
+- Magnum allows users to create and manage container orchestration engines and clusters.
+
+
+
+
+
 
 
 
