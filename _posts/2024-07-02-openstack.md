@@ -4,17 +4,19 @@ title: 02-07-2024
 ---
 
 # OPENSTACK
+ - Openstack - OpenStack is a cloud operating system that controls large pools of compute, storage, and networking resources throughout a datacenter, all managed through a dashboard that gives administrators control while empowering their users to provision resources through a web interface.
 
-- Openstack - OpenStack is a cloud operating system that controls large pools of compute, storage, and networking resources throughout a datacenter, all managed through a dashboard that gives administrators control while empowering their users to provision resources through a web interface.
+-  openstack services consist of several independent part:
 
-- openstack  services consist of several independent part:
 - All services authenticate through a common identity service called as Keystone.
+
 - Individual services interact with each through public APIs ,except where privliged administrator commands are necessary
+
 - All services have atleast one API process,which listens for api requests and preprocesses them and passes them to the other part of the services.
 
 
-**Openstack Installation by Devstack**
-{% highlight ruby %}
+ **Openstack Installation by Devstack**
+ {% highlight ruby %}
  1. sudo useradd -s /bin/bash -d /opt/stack -m stack
  2. sudo chmod +x /opt/stack
  3. echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
@@ -29,7 +31,7 @@ title: 02-07-2024
       SERVICE_PASSWORD=$ADMIN_PASSWORD
  8. ./stack.sh   
 
-{% endhighlight %}
+ {% endhighlight %}
 
 **The architecture of OpenStack is modular, consisting of several core components that work together to provide cloud services.**
 
@@ -75,13 +77,13 @@ title: 02-07-2024
 - swift-object-server: Manages storage of objects.
 
 
-4. Identity (Keystone):
+4. Identity (Keystone)
 - Provides authentication and authorization for all OpenStack services.
 
 - components of keystone
 - keystone api - Handles API requests for token validation and  user management.
 
-5. Image (Glance):
+5. Image (Glance)
 - Manages disk images used by VMs.
 
 - components of glance-
@@ -101,6 +103,7 @@ title: 02-07-2024
 - heat-api: Handles API requests.
 
   **steps for managing heat service**
+
 - Step 1 First of all, the template is designed which consists of resource description. This is written in a human-readable format. 
 - Step 2 Now the stack is created by the user. This is considered to be successfully created when the Heat CLI tool points to the parameters   and the template. 
 - Step 3 Now the Heat API and the Heat cli tool communicate with each other. 
@@ -144,25 +147,25 @@ title: 02-07-2024
 13. Container Orchestration (Magnum)
 - Magnum allows users to create and manage container orchestration engines and clusters.
 
-
-
 **Commands to launch a VM in openstack**
-1. Commands for project:-
+
+1. Commands for project
 
 - openstack project list
 - openstack project create projectname
 
-2. commands for user creation:-
+2. commands for user creation
 
 - openstack user create –domain default –password password username
 - openstack domain list
 - openstack user list
-3. commands to define roles:-
+
+3. commands to define roles
 
 - openstack role list
 - openstack role add –project projectname –user username role
 
-4. commands to create image:-
+4. commands to create image
 
 - cd devstack/
 - source openrc
@@ -171,12 +174,12 @@ title: 02-07-2024
 - openstack image list
 - openstack image create “ubuntu” --disk-format iso –container-format aki --public –-file /opt/stack/devstack/ubuntu-22.04.4-live-server-amd64.iso
   
-5. Commands to list and create flavour:-
+5. Commands to list and create flavour
 
 - openstack flavor list
 - openstack flavor create --ram 512 --disk 1 --vcpus 1 m1.tiny
 
-6. commands to create volume:-
+6. commands to create volume
 
 - openstack volume list
 - openstack volume create --size 1 MyFirstVolume
