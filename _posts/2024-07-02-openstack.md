@@ -149,23 +149,23 @@ title: 02-07-2024
 
 **Commands to launch a VM in openstack**
 
-- Commands for project
+**Commands for project**
 
 - openstack project list
 - openstack project create projectname
 
-- commands for user creation
+**commands for user creation**
 
 - openstack user create –domain default –password password username
 - openstack domain list
 - openstack user list
 
--  commands to define roles
+**commands to define roles**
 
 - openstack role list
 - openstack role add –project projectname –user username role
 
--  commands to create image
+**commands to create image**
 
 - cd devstack/
 - source openrc
@@ -174,17 +174,17 @@ title: 02-07-2024
 - openstack image list
 - openstack image create “ubuntu” --disk-format iso –container-format aki --public –-file /opt/stack/devstack/ubuntu-22.04.4-live-server-amd64.iso
   
--  Commands to list and create flavour
+**Commands to list and create flavour**
 
 - openstack flavor list
 - openstack flavor create --ram 512 --disk 1 --vcpus 1 m1.tiny
 
--  commands to create volume
+**commands to create volume**
 
 - openstack volume list
 - openstack volume create --size 1 MyFirstVolume
 
--  commands to create network.
+**commands to create network**
 
 - openstack network create NETWORK_NAME
 - openstack subnet create --subnet-range SUBNET --network NETWORK SUBNET_NAME
@@ -195,12 +195,12 @@ title: 02-07-2024
 - openstack security group rule create –-proto tcp –-dst-port 22 sgname
 
 
--   commands to create and list keypair.
+ **commands to create and list keypair**
 
 - openstack keypair list
 - openstack keypair create test > test.pem
 
--  commands to create and list server.
+**commands to create and list server**
 
 - openstack server list
 - openstack server create –-image cirros-0.6.2-x86_64-disk –-flavor ds4G –-security-group sg1 –-key-name test –-availability-zone nova –-   --network net1 servername
